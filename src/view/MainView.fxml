@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="112.0" prefWidth="292.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainViewController">
+
+    
+    <center>   
+        <VBox prefHeight="128.0" prefWidth="284.0"> 
+            <HBox prefWidth="276.0">
+                <Text text="Nombre de thread : " textAlignment="CENTER" />
+                <Label fx:id="nbthread" textAlignment="CENTER" />
+            </HBox>
+            <HBox>
+                <Text text="Etat : " textAlignment="CENTER" />
+                <Label fx:id="etat" text="non lancé" textAlignment="CENTER" />
+            </HBox>
+            <HBox>
+                <Text text="Serveur en écoute sur le port : " textAlignment="CENTER" />
+                <Label fx:id="port" textAlignment="CENTER" />
+            </HBox>
+            <HBox>
+                <Text text="Dernier client connecté : " textAlignment="CENTER" />
+                <Label fx:id="lastclient" textAlignment="CENTER" />
+            </HBox>
+            <HBox>
+                <Text text="Message : " textAlignment="CENTER" />
+                <Label fx:id="message" textAlignment="CENTER" />
+            </HBox>
+        </VBox>
+                
+    </center>
+    
+   <bottom>    
+       <HBox>
+           <Button fx:id="start" contentDisplay="CENTER" mnemonicParsing="false" onAction="#start" prefWidth="400.0" text="Lancer le serveur!" textAlignment="CENTER" />
+           <Button fx:id="stop" contentDisplay="CENTER" mnemonicParsing="false" onAction="#stop" prefWidth="400.0" text="Fermer le serveur!" textAlignment="CENTER" /> 
+       </HBox>
+    </bottom>
+ 
+    
+</BorderPane>

@@ -7,30 +7,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="112.0" prefWidth="292.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainViewController">
+<BorderPane prefHeight="223.0" prefWidth="534.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainViewController">
 
     
     <center>   
-        <VBox prefHeight="128.0" prefWidth="284.0"> 
-            <HBox prefWidth="276.0">
-                <Text text="Nombre de thread : " textAlignment="CENTER" />
-                <Label fx:id="nbthread" textAlignment="CENTER" />
-            </HBox>
+        <VBox> 
             <HBox>
                 <Text text="Etat : " textAlignment="CENTER" />
-                <Label fx:id="etat" text="non lancé" textAlignment="CENTER" />
-            </HBox>
-            <HBox>
-                <Text text="Serveur en écoute sur le port : " textAlignment="CENTER" />
-                <Label fx:id="port" textAlignment="CENTER" />
-            </HBox>
-            <HBox>
-                <Text text="Dernier client connecté : " textAlignment="CENTER" />
-                <Label fx:id="lastclient" textAlignment="CENTER" />
+                <Label fx:id="etat" text="A l'arrêt" textAlignment="CENTER" />
             </HBox>
             <HBox>
                 <Text text="Message : " textAlignment="CENTER" />
-                <Label fx:id="message" textAlignment="CENTER" />
+                <TextArea fx:id="message" />
             </HBox>
         </VBox>
                 

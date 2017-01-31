@@ -12,18 +12,26 @@ package model;
 
 import java.io.*;
 import java.net.*;
+import javafx.scene.control.TextArea;
 
 public class Serveur extends Thread {
 
 	private Socket socket;
+        private PrintStream ps;
 
-	public Serveur (Socket socketClient){
+	public Serveur (Socket socketClient, TextArea ta){
 		socket = socketClient;
+                ps = new PrintStream(new Console(ta)) ; 
 		start();
 	}
 
 	public void run(){
-            String reponse,url,mot[],separateur=" ";
+            //declaration de variable
+            String reponse,mot[],separateur=" ";
+            
+            //initialisation permettant d'afficher la sortie standard et d'erreur sur la textArea grâce à la classe console
+            System.setOut(ps);
+            System.setErr(ps);
             
             try {
 
@@ -36,17 +44,19 @@ public class Serveur extends Thread {
                 // Lecture du message du client
                 String messageClient = in.readLine(); 
                 
+                //partager le message reçu
                 mot=messageClient.split(separateur);
                 
-                 reponse = traitementError(mot);
-                 
-                // Envoi de la réponse
-                out.println(reponse);
+                //traitement de ce message partagé par l'algorithme de traitement
+                reponse = traitementError(mot);
                 
-                // Lecture du message du client
-                messageClient = in.readLine(); 
+                //affichage de la réponse avant son envoi
+                System.out.println(reponse);
+                
+                // Envoi de la réponse
+                out.println(reponse);        
 
-
+                //fermeture de la socket, message d'entrée et de sorties
                 in.close();
                 out.close();
                 socket.close();
@@ -60,36 +70,54 @@ public class Serveur extends Thread {
         
         
         private String traitementError (String mot[]) throws IOException {
+            //declaration
             String url,reponse;
             char c;
             int charInt;
-             if (mot[0].equals("GET")&&mot[2].equals("HTTP/1.1")){
-                            url=mot[1];
-                            System.out.println(url+"\n");
-                            if (url.equals("/")) url="index.html";
-                            else{
-                                    url=url.substring(1);
-                            url.replace("/", "\\");
-                            }
-                            try{
-                                    FileReader htmlFile=new FileReader(url);
-                                    reponse="HTTP/1.1 200 OK\nDate: Wed, 10 Sep 2015 14:20:21 GMT\nServer: test\nMime-Version: 1.0\nContent-Type: text/html\nLast-Modified: Wed, 10 Sep 2015 14:20:23 GMT\nContent-Length: 139\n\n";
-                                    charInt=htmlFile.read();
-                                    while (charInt!=-1){
-                                            c=(char)charInt;
-                                            reponse=reponse+c;
-                                            charInt=htmlFile.read();
-                                    }
-                                    htmlFile.close();
-                            } catch(FileNotFoundException e){
-                                    reponse="HTTP/1.1 404 NOTFOUND\nDate: Wed, 10 Sep 2015 14:20:21 GMT\nServer: test\nMime-Version: 1.0\nContent-Type: text/html\nLast-Modified: Wed, 10 Sep 2015 14:20:23 GMT\nContent-Length: 139\n\n<html>404 not found</html>";
-                                    System.out.println("fichier non trouve \n");
-                            }
+            
+            //analyse de la réponse
+            if (mot[0].equals("GET") && mot[2].equals("HTTP/1.1")){     
+                
+                url=mot[1];
+                System.out.println(url+"\n");
+
+                if (url.equals("/")) {
+                    url="index.html";
+                } else{
+                    url=url.substring(1);
+                    url.replace("/", "\\");
+                }
+
+                try {  
+                    
+                    File inputFile = new File(url);
+                    FileReader htmlFile=new FileReader(inputFile);
+                    reponse="HTTP/1.1 200 OK\nServer: test\nMime-Version: 1.0\nContent-Type: text/html\n\n";
+                    System.out.println(reponse);
+                    charInt=htmlFile.read();
+                    
+                    while (charInt!=-1){
+                            c=(char)charInt;
+                            reponse=reponse+c;
+                            charInt=htmlFile.read();
                     }
-                    else{
-                            reponse="300";
-                    }
-             return reponse;
+                    
+                    htmlFile.close();
+                    
+                } catch(FileNotFoundException e){
+                    //affichage du message d'erreur pour le client
+                    reponse="HTTP/1.1 404 NOT FOUND\nServer: test\nMime-Version: 1.0\nContent-Type: text/html\n\n<html><body><h1>404 not found</h1></br>La page que vous demandez n'existe pas !</body></html>";
+                    //affichage du message d'erreur sur le programme
+                    System.out.println("Fichier non trouvé ! \n Message d'erreur : "+e.getMessage());
+                }
+            } else{
+                //affichage du message d'erreur pour le client
+                reponse="HTTP/1.1 300 HTTP Server Problem";
+                //affichage du message d'erreur sur le programme
+                System.out.println("Problème lié au serveur ! \n");
+            }
+            
+            return reponse;
         }
 	
 }

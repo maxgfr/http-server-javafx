@@ -7,16 +7,21 @@ package model;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import javafx.scene.control.TextArea;
 
 /**
  *
  * @author maxime
  */
 public class GestionServeur implements Runnable {
+    
     private volatile boolean running;  // this indicates it's running
+    
+    private TextArea ta;
 
-    public GestionServeur() {
+    public GestionServeur(TextArea ta) {
         running = true;  // thread is running when it's created (though not really until "run" is called)
+        this.ta=ta;
     }
 
     // called from start()
@@ -24,7 +29,7 @@ public class GestionServeur implements Runnable {
         try {
             ServerSocket serverSocket = new ServerSocket(80);
             while (running) {
-                new Serveur(serverSocket.accept());
+                new Serveur(serverSocket.accept(),ta);
             }
         } catch (IOException io) {
             io.getMessage();

@@ -5,17 +5,16 @@
  */
 package controller;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import model.GestionServeur;
-import model.Serveur;
+import java.io.PrintStream;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
+import model.Console;
 
 /**
  *
@@ -36,7 +35,8 @@ public class MainViewController implements Initializable {
     private Label lastclient;
     
     @FXML
-    private Label message;
+    private TextArea message;
+    
     
     @FXML
     private Button start;
@@ -49,8 +49,8 @@ public class MainViewController implements Initializable {
     private void start() {
         start.setDisable(true); //eviter la création d'un nouveau thread
         stop.setDisable(false);
-        etat.setText("connecté");
-        gs = new GestionServeur();  // create new runnable
+        etat.setText("En Marche");
+        gs = new GestionServeur(message);  // create new runnable
         Thread t = new Thread(gs); // create thread
         t.start();
     }
@@ -60,14 +60,14 @@ public class MainViewController implements Initializable {
     private void stop() {
         start.setDisable(false);
         stop.setDisable(true);
-        etat.setText("déconnecté");
+        etat.setText("A l'arrêt");
         gs.stop();
     }
     
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
     }    
     
 }
